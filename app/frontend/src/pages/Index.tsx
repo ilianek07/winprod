@@ -19,6 +19,7 @@ import { useTrendScores } from "@/hooks/useTrendScores";
 import { PepitesSection } from "@/components/PepitesSection";
 import { AICoach } from "@/components/AICoach";
 import { BeginnerGuide } from "@/components/BeginnerGuide";
+import { NotificationPanel, NotificationEvent } from "@/components/NotificationPanel";
 
 const NICHE_TO_CATEGORY: Record<OnboardingNiche, CategoryKey> = {
   tech: "global",
@@ -38,6 +39,7 @@ const Index = () => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
   const [onboardingPrefs, setOnboardingPrefs] = useState<OnboardingPrefs | null>(null);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -119,6 +121,48 @@ const Index = () => {
     }));
   }, [currentProducts, trendScores]);
 
+  const notifications = useMemo<NotificationEvent[]>(() => {
+    const source = productsByCategory.global;
+    if (!source.length) return [];
+    const now = Date.now();
+    const offsets = [2, 7, 14, 23, 38, 55, 82, 120, 195, 260];
+    let slot = 0;
+    const nextTs = () => new Date(now - offsets[Math.min(slot++, offsets.length - 1)] * 60000);
+    const events: NotificationEvent[] = [];
+
+    source
+      .filter(p => p.rank <= 10 && p.rankMovement === "up")
+      .slice(0, 3)
+      .forEach(p => events.push({ id: `top10_${p.id}`, type: "top10_entry", message: `${p.name} entre dans le Top ${p.rank}`, timestamp: nextTs() }));
+
+    source
+      .filter(p => p.trend >= 60)
+      .slice(0, 2)
+      .forEach(p => events.push({ id: `trend_${p.id}`, type: "trend_surge", message: `${p.name} explose — score tendance ${p.trend}`, timestamp: nextTs() }));
+
+    const captured = new Set(events.map(e => e.id));
+    source
+      .filter(p => p.rankMovement === "up" && !captured.has(`top10_${p.id}`) && !captured.has(`trend_${p.id}`))
+      .slice(0, 3)
+      .forEach(p => events.push({ id: `rank_${p.id}`, type: "rank_up", message: `${p.name} monte dans le classement (Position #${p.rank})`, timestamp: nextTs() }));
+
+    source
+      .filter(p => p.margin >= 85 && p.saturation < 30)
+      .slice(0, 2)
+      .forEach(p => events.push({ id: `pepite_${p.id}`, type: "new_pepite", message: `Nouvelle pépite détectée : ${p.name} (${p.margin}% de marge)`, timestamp: nextTs() }));
+
+    return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+  }, []);
+
+  const handleBellClick = useCallback(() => {
+    if (currentUser?.isPremium) {
+      setIsNotificationOpen(prev => !prev);
+    } else {
+      setIsNotificationOpen(false);
+      setIsWelcomeVipOpen(true);
+    }
+  }, [currentUser]);
+
   const handleAnalyse = useCallback((product: Product) => {
     setSelectedProduct(product);
     setIsPanelOpen(true);
@@ -179,7 +223,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
-      <Header onLoginClick={handleOpenLogin} user={currentUser} />
+      <Header onLoginClick={handleOpenLogin} onBellClick={handleBellClick} user={currentUser} />
 
       {checkoutMessage && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-[#0f1a12] px-4 py-2.5 shadow-xl animate-in fade-in slide-in-from-top-2 duration-300">
@@ -232,6 +276,13 @@ const Index = () => {
         isOpen={isWelcomeVipOpen}
         onClose={() => setIsWelcomeVipOpen(false)}
         onPayment={handleVipPayment}
+      />
+
+      {/* Notification Panel (VIP only) */}
+      <NotificationPanel
+        isOpen={isNotificationOpen}
+        onClose={() => setIsNotificationOpen(false)}
+        notifications={notifications}
       />
 
       {/* Onboarding Modal (shows once after first registration) */}

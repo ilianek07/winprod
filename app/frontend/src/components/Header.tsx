@@ -6,10 +6,11 @@ import { LanguageSelector } from "./LanguageSelector";
 
 interface HeaderProps {
   onLoginClick: () => void;
+  onBellClick: () => void;
   user?: AuthUser | null;
 }
 
-export function Header({ onLoginClick, user }: HeaderProps) {
+export function Header({ onLoginClick, onBellClick, user }: HeaderProps) {
   const { t } = useTranslation();
   const location = useLocation();
   const isSuppliersPage = location.pathname === "/fournisseurs";
@@ -63,7 +64,10 @@ export function Header({ onLoginClick, user }: HeaderProps) {
           </div>
 
           {/* Notifications */}
-          <button className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-[#1e1e2e] text-gray-400 hover:text-white hover:border-gray-500 transition-colors">
+          <button
+            onClick={onBellClick}
+            className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-[#1e1e2e] text-gray-400 hover:text-white hover:border-gray-500 transition-colors"
+          >
             <Bell className="h-4 w-4" />
             <div className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-emerald-500" />
           </button>
