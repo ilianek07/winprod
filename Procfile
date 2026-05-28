@@ -1,1 +1,1 @@
-web: sh -c 'cd app/backend && alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port $PORT'
+web: sh -c 'cd app/backend && uvicorn main:app --host 0.0.0.0 --port $PORT'
