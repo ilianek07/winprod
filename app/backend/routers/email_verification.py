@@ -16,6 +16,21 @@ logger = logging.getLogger(__name__)
 
 TOKEN_EXPIRE_HOURS = 24
 
+VERIFY_PATH = "/auth/verify-email"
+
+
+def _build_redirect_url(client_redirect_url: str) -> str:
+    """Return the canonical redirect URL for verification emails.
+
+    If SITE_URL is set (e.g. https://winprod.org in production) it takes
+    precedence over whatever the client sent, preventing localhost links from
+    landing in production emails.
+    """
+    site_url = os.getenv("SITE_URL", "").rstrip("/")
+    if site_url:
+        return f"{site_url}{VERIFY_PATH}"
+    return client_redirect_url
+
 
 # ── Pydantic schemas ──────────────────────────────────────────────────────────
 
@@ -157,7 +172,7 @@ async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db)):
         return {"already_verified": True, "message": "Email déjà vérifié"}
 
     token = await _create_token(db, email)
-    await _send_verification_email(email, token, body.redirect_url)
+    await _send_verification_email(email, token, _build_redirect_url(body.redirect_url))
     return {"already_verified": False, "message": "Email de vérification envoyé"}
 
 
@@ -213,5 +228,5 @@ async def resend_verification(body: ResendRequest, db: AsyncSession = Depends(ge
         return {"already_verified": True, "message": "Email déjà vérifié"}
 
     token = await _create_token(db, email)
-    await _send_verification_email(email, token, body.redirect_url)
+    await _send_verification_email(email, token, _build_redirect_url(body.redirect_url))
     return {"already_verified": False, "message": "Email de vérification renvoyé"}
