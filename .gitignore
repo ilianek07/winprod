@@ -1,0 +1,56 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# ── Secrets & environment ──────────────────────────────────────────────────────
+.env
+.env.local
+.env.production
+.env.*.local
+
+# ── Database ───────────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+app/backend/local.db
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+app/backend/logs/
+
+# ── Node / frontend ────────────────────────────────────────────────────────────
+node_modules/
+app/frontend/dist/
+
+# ── Build artifacts served by backend ─────────────────────────────────────────
+app/backend/static_frontend/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── MetaGPT / platform internal ───────────────────────────────────────────────
+.atoms/
+.claude/
+app/.mgx/
+app/frontend/.mgx/
+uploads/
+assets/images/
