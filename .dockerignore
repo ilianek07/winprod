@@ -1,0 +1,29 @@
+# Dépendances générées
+node_modules/
+app/frontend/dist/
+app/backend/static_frontend/
+app/backend/__pycache__/
+**/__pycache__/
+**/*.py[cod]
+app/backend/.venv/
+
+# Secrets & DB locales
+.env
+*.db
+*.sqlite
+app/backend/local.db
+app/backend/logs/
+
+# Git & outils
+.git/
+.gitignore
+.DS_Store
+
+# Docs & fichiers de plateforme
+.atoms/
+.claude/
+app/.mgx/
+app/frontend/.mgx/
+uploads/
+docs/
+assets/

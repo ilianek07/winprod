@@ -1,17 +1,1 @@
-[phases.setup]
-nixPkgs = ["python311", "nodejs_20"]
-
-[phases.install]
-cmds = [
-  "python3 -m ensurepip --upgrade",
-  "python3 -m pip install --upgrade pip",
-  "python3 -m pip install -r app/backend/requirements.txt",
-  "cd app/frontend && npm install"
-]
-
-[phases.build]
-cmds = [
-  "cd app/frontend && npm run build:prod",
-  "mkdir -p app/backend/static_frontend",
-  "cp -r app/frontend/dist/. app/backend/static_frontend/"
-]
+# Superseded by Dockerfile — Railway uses the Dockerfile automatically when present.
