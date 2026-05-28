@@ -17,7 +17,7 @@ load_dotenv(_dotenv_path, override=False)
 from core.config import settings
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.routing import APIRouter
 from fastapi.staticfiles import StaticFiles
 
@@ -200,10 +200,22 @@ def health_check():
 
 
 # ── Serve built React frontend (production) ───────────────────────────────────
-# This must be registered AFTER all API routes so that API paths always win.
+# Registered AFTER all API routes so API paths always win.
 _static_dir = pathlib.Path(__file__).parent / "static_frontend"
 if _static_dir.exists():
-    app.mount("/", StaticFiles(directory=str(_static_dir), html=True), name="frontend")
+    # Serve hashed Vite assets efficiently via StaticFiles
+    _assets_dir = _static_dir / "assets"
+    if _assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(_assets_dir)), name="static-assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def spa_fallback(full_path: str):
+        # Serve real static files (favicon.ico, robots.txt, …) when they exist
+        candidate = _static_dir / full_path
+        if candidate.is_file():
+            return FileResponse(str(candidate))
+        # SPA catch-all: let React Router handle the route client-side
+        return FileResponse(str(_static_dir / "index.html"))
 
 
 def run_in_debug_mode(app: FastAPI):
