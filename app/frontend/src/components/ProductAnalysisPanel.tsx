@@ -649,7 +649,7 @@ export function ProductAnalysisPanel({ product, isOpen, onClose, isPremium = fal
         }`}
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#1e1e2e] bg-[#0f0f17]/95 backdrop-blur-sm px-6 py-4">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#1e1e2e] bg-[#0f0f17]/95 backdrop-blur-sm px-4 py-3 sm:px-6 sm:py-4">
           <h2 className="text-lg font-bold text-white">{t("analysis.title")}</h2>
           <button
             onClick={onClose}
@@ -659,7 +659,7 @@ export function ProductAnalysisPanel({ product, isOpen, onClose, isPremium = fal
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-5 sm:space-y-6">
           {/* VIP Paywall for non-premium users */}
           {!isPremium && onPayment && (
             <AnalysisPaywall onPayment={onPayment} />

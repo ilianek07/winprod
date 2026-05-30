@@ -25,7 +25,7 @@ export default function SuppliersPage() {
         user={currentUser}
       />
 
-      <main className="max-w-[1400px] mx-auto px-4 lg:px-6 py-8">
+      <main className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6 py-6 sm:py-8">
         {/* Page header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
@@ -52,7 +52,7 @@ export default function SuppliersPage() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {suppliers.map((supplier) => (
             <SupplierCard key={supplier.id} supplier={supplier} t={t} />
           ))}

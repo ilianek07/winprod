@@ -99,12 +99,12 @@ export function LeaderboardRow({ product, onAnalyse, isLoadingTrends, preferredN
   const isForMe = !!preferredNiche && nicheMatchesProduct(preferredNiche, product.niche);
 
   return (
-    <div className={`group flex items-center gap-4 rounded-xl border bg-[#12121a] p-3 sm:p-4 hover:border-emerald-500/30 hover:bg-[#161620] transition-all duration-200 cursor-pointer ${isForMe ? "border-emerald-500/25" : "border-[#1e1e2e]"}`}>
+    <div className={`group flex items-center gap-2 sm:gap-4 rounded-xl border bg-[#12121a] p-3 sm:p-4 hover:border-emerald-500/30 hover:bg-[#161620] transition-all duration-200 cursor-pointer ${isForMe ? "border-emerald-500/25" : "border-[#1e1e2e]"}`}>
       {/* Rank */}
       <RankBadge rank={product.rank} movement={product.rankMovement} />
 
       {/* Product Image */}
-      <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-[#1e1e2e]">
+      <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 overflow-hidden rounded-lg border border-[#1e1e2e]">
         <img
           src={product.image}
           alt={product.name}

@@ -231,7 +231,7 @@ const Index = () => {
         </div>
       )}
 
-      <main className="flex gap-0 lg:gap-6 px-4 lg:px-6 pb-8 pt-4 max-w-[1600px] mx-auto">
+      <main className="flex flex-col lg:flex-row gap-4 lg:gap-6 px-3 sm:px-4 lg:px-6 pb-8 pt-4 max-w-[1600px] mx-auto">
         {/* Sidebar */}
         <Sidebar
           activeCategory={activeCategory}

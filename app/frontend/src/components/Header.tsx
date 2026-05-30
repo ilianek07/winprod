@@ -6,7 +6,7 @@ import { LanguageSelector } from "./LanguageSelector";
 
 interface HeaderProps {
   onLoginClick: () => void;
-  onBellClick: () => void;
+  onBellClick?: () => void;
   user?: AuthUser | null;
 }
 
@@ -36,17 +36,17 @@ export function Header({ onLoginClick, onBellClick, user }: HeaderProps) {
           </div>
 
           {/* Nav links */}
-          <nav className="hidden md:flex items-center gap-1 ml-2">
+          <nav className="flex items-center gap-1 ml-1.5">
             <Link
               to="/fournisseurs"
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
+              className={`flex items-center gap-1.5 rounded-lg px-2 md:px-3 py-1.5 text-xs font-medium transition-all ${
                 isSuppliersPage
                   ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
                   : "text-gray-400 hover:text-white hover:bg-[#1e1e2e] border border-transparent"
               }`}
             >
               <Package className="h-3.5 w-3.5" />
-              {t('header.suppliers')}
+              <span className="hidden md:inline">{t('header.suppliers')}</span>
             </Link>
           </nav>
         </div>

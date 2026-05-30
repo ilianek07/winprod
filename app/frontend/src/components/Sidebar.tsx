@@ -14,25 +14,26 @@ export function Sidebar({ activeCategory, onCategoryChange, isPremium, isDebutan
   const weeklyProduct = productsByCategory["global"][0];
 
   return (
-    <aside className="w-full lg:w-64 shrink-0 space-y-4">
+    <aside className="w-full lg:w-64 lg:shrink-0 space-y-3 lg:space-y-4">
       {/* Category Filters */}
-      <div className="rounded-xl border border-[#1e1e2e] bg-[#12121a] p-4">
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
+      <div className="rounded-xl border border-[#1e1e2e] bg-[#12121a] p-3 lg:p-4">
+        <h3 className="mb-2 lg:mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
           {t('sidebar.categories')}
         </h3>
-        <div className="space-y-1.5">
+        {/* Horizontal scroll on mobile, vertical list on lg */}
+        <div className="scrollbar-none flex gap-2 overflow-x-auto pb-0.5 lg:flex-col lg:overflow-x-visible lg:gap-0 lg:space-y-1.5 lg:pb-0">
           {/* Guide débutant — visible uniquement pour les débutants */}
           {isDebutant && (
             <button
               onClick={() => onCategoryChange("beginners")}
-              className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-all duration-200 ${
+              className={`flex shrink-0 lg:w-full items-center gap-2 lg:gap-2.5 rounded-lg px-3 py-2 lg:py-2.5 text-left text-sm font-medium transition-all duration-200 ${
                 activeCategory === "beginners"
                   ? "bg-teal-500/10 border border-teal-500/30 text-teal-400"
                   : "border border-teal-500/15 text-teal-500/70 hover:bg-teal-500/5 hover:text-teal-400 hover:border-teal-500/25"
               }`}
             >
               <BookOpen className="h-4 w-4 shrink-0" />
-              <span className="truncate flex-1">Guide Débutant</span>
+              <span className="whitespace-nowrap lg:truncate lg:flex-1">Guide Débutant</span>
               <span className="shrink-0 rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide bg-teal-500/15 text-teal-400">
                 Nouveau
               </span>
@@ -46,7 +47,7 @@ export function Sidebar({ activeCategory, onCategoryChange, isPremium, isDebutan
               <button
                 key={cat.key}
                 onClick={() => onCategoryChange(cat.key)}
-                className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-all duration-200 ${
+                className={`flex shrink-0 lg:w-full items-center gap-2 lg:gap-2.5 rounded-lg px-3 py-2 lg:py-2.5 text-left text-sm font-medium transition-all duration-200 ${
                   isActive && isVipCat
                     ? "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
                     : isActive
@@ -57,7 +58,7 @@ export function Sidebar({ activeCategory, onCategoryChange, isPremium, isDebutan
                 }`}
               >
                 <span className="text-base">{cat.emoji}</span>
-                <span className="truncate flex-1">{t(`sidebar.cat.${cat.key}`)}</span>
+                <span className="whitespace-nowrap lg:truncate lg:flex-1">{t(`sidebar.cat.${cat.key}`)}</span>
                 {isVipCat && (
                   <span
                     className={`shrink-0 rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
@@ -75,8 +76,8 @@ export function Sidebar({ activeCategory, onCategoryChange, isPremium, isDebutan
         </div>
       </div>
 
-      {/* Weekly Product */}
-      <div className="rounded-xl border border-[#1e1e2e] bg-[#12121a] p-4">
+      {/* Weekly Product — desktop only */}
+      <div className="hidden lg:block rounded-xl border border-[#1e1e2e] bg-[#12121a] p-4">
         <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
           {t('sidebar.weeklyProduct')}
         </h3>
